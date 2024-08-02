@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Text</title>
+    <style>
+        #editable {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="editable" contenteditable="true">Edit this text...</div>
+    <script>
+        // Function to save text to local storage
+        function saveText() {
+            const text = document.getElementById('editable').innerText;
+            localStorage.setItem('editableText', text);
+        }
+
+        // Function to load text from local storage
+        function loadText() {
+            const savedText = localStorage.getItem('editableText');
+            if (savedText) {
+                document.getElementById('editable').innerText = savedText;
+            }
+        }
+
+        // Load text when the page loads
+        window.onload = loadText;
+
+        // Save text whenever it is modified
+        document.getElementById('editable').addEventListener('input', saveText);
+    </script>
+</body>
+</html>
