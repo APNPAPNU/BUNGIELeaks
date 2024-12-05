@@ -1,42 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editable Text</title>
-    <style>
-        #editable {
-            width: 100%;
-            height: 300px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            overflow: auto;
-        }
-    </style>
-</head>
-<body>
-    <div id="editable" contenteditable="true">Edit this text...</div>
-    <script>
-        // Function to save text to local storage
-        function saveText() {
-            const text = document.getElementById('editable').innerText;
-            localStorage.setItem('editableText', text);
-        }
+import React, { useState } from 'react';
+import { Menu, Music, Calendar, Users, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 
-        // Function to load text from local storage
-        function loadText() {
-            const savedText = localStorage.getItem('editableText');
-            if (savedText) {
-                document.getElementById('editable').innerText = savedText;
-            }
-        }
+const SalsaBandWebsite = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
 
-        // Load text when the page loads
-        window.onload = loadText;
+  // Function to generate Google Maps directions link
+  const getGoogleMapsDirectionsLink = (location) => {
+    const encodedLocation = encodeURIComponent(location);
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
+  };
 
-        // Save text whenever it is modified
-        document.getElementById('editable').addEventListener('input', saveText);
-    </script>
-</body>
-</html>
+  const bandMembers = [
+    { name: "Carlos Rodriguez", instrument: "Lead Vocals", photo: "/api/placeholder/300/300", bio: "Passionate vocalist with 10 years of salsa experience" },
+    { name: "Maria Gonzalez", instrument: "Percussion", photo: "/api/placeholder/300/300", bio: "Master of rhythms and beats" },
+    { name: "Juan Perez", instrument: "Trumpet", photo: "/api/placeholder/300/300", bio: "Brass maestro bringing the heat" },
+    { name: "Sofia Martinez", instrument: "Piano", photo: "/api/placeholder/300/300", bio: "Keyboard virtuoso and musical director" }
+  ];
+
+  const upcomingShows = [
+    { 
+      date: "December 15, 2024", 
+      venue: "Salsa Club NY", 
+      location: "Long Island, NY",
+      address: "123 Salsa Street, Long Island, NY 11510",
+      ticketLink: "#"
+    },
+    { 
+      date: "January 22, 2025", 
+      venue: "Latin Nights", 
+      location: "Brooklyn, NY",
+      address: "456 Dance Avenue, Brooklyn, NY 11201",
+      ticketLink: "#"
+    },
+    { 
+      date: "February 8, 2025", 
+      venue: "Tropical Beats Festival", 
+      location: "Manhattan, NY",
+      address: "789 Rhythm Road, Manhattan, NY 10001",
+      ticketLink: "#"
+    }
+  ];
+
+  const socialLinks = {
+    facebook: "https://facebook.com/gruposabrosura",
+    instagram: "https://instagram.com/gruposabrosura",
+    tiktok: "https://tiktok.com/@gruposabrosura"
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setContactForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const mailtoLink = `mailto:gruposabrosura@example.com?subject=Contact%20from%20Website&body=Name:%20${encodeURIComponent(contactForm.name)}%0AEmail:%20${encodeURIComponent(contactForm.email)}%0A%0AMessage:%20${encodeURIComponent(contactForm.message)}`;
+    
+    window.location.href = mailtoLink;
+  };
+
+  return (
+    <div className="min-h-screen scroll-smooth bg-gradient-to-b from-[#FCD116] via-[#003893] to-[#CE1126]">
+      {/* Navigation */}
+      <nav className="bg-[#003893]/90 backdrop-blur-md text-white p-4 fixed top-0 left-0 right-0 z-50 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-2xl font-bold flex items-center">
+            <img 
+              src="/api/placeholder/50/50" 
+              alt="Grupo Sabrosura Logo" 
+              className="mr-3 rounded-full w-12 h-12 object-cover"
+            />
+            Grupo Sabrosura
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-6 items-center">
+            <a href="#home" className="hover:text-[#FCD116] flex items-center transition-colors">
+              <Music className="mr-2" /> Home
+            </a>
+            <a href="#about" className="hover:text-[#FCD116] flex items-center transition-colors">
+              <Users className="mr-2" /> Band
+            </a>
+            <a href="#shows" className="hover:text-[#FCD116] flex items-center transition-colors">
+              <Calendar className="mr-2" /> Shows
+            </a>
+            <a href="#contact" className="hover:text-[#FCD116] flex items-center transition-colors">
+              <Mail className="mr-2" /> Contact
+            </a>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <Menu className="text-white w-8 h-8" />
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#003893] absolute left-0 right-0 top-full shadow-lg">
+            <a href="#home" className="block p-4 border-t border-blue-700 hover:bg-blue-800 transition-colors">
+              <Music className="inline-block mr-2" /> Home
+            </a>
+            <a href="#about" className="block p-4 border-t border-blue-700 hover:bg-blue-800 transition-colors">
+              <Users className="inline-block mr-2" /> Band
+            </a>
+            <a href="#shows" className="block p-4 border-t border-blue-700 hover:bg-blue-800 transition-colors">
+              <Calendar className="inline-block mr-2" /> Shows
+            </a>
+            <a href="#contact" className="block p-4 border-t border-blue-700 hover:bg-blue-800 transition-colors">
+              <Mail className="inline-block mr-2" /> Contact
+            </a>
+          </div>
+        )}
+      </nav>
+
+      {/* Rest of the component remains the same... */}
+      
+      {/* Footer */}
+      <footer className="bg-[#003893] text-white py-8">
+        <div className="container mx-auto text-center">
+          <p className="mb-4">&copy; 2024 Grupo Sabrosura. All Rights Reserved.</p>
+          <div className="flex justify-center space-x-6">
+            <a 
+              href={socialLinks.facebook} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-[#FCD116] transition-colors"
+            >
+              <Facebook className="w-8 h-8" />
+            </a>
+            <a 
+              href={socialLinks.instagram} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-[#FCD116] transition-colors"
+            >
+              <Instagram className="w-8 h-8" />
+            </a>
+            <a 
+              href={socialLinks.tiktok} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-[#FCD116] transition-colors text-sm"
+            >
+              TikTok
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default SalsaBandWebsite;
